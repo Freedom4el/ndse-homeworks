@@ -1,7 +1,7 @@
 const readline = require('readline');
 const mystery = Math.floor(Math.random() * 101);
 
-console.log('Загадано число в диапазоне от 0 до 100 '+mystery);
+console.log('Загадано число в диапазоне от 0 до 100');
 
 const input = readline.createInterface(process.stdin);
 
