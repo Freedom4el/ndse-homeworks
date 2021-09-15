@@ -1,0 +1,26 @@
+{
+  "name": "005-http",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node -r dotenv/config index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Freedom4el/ndse-homeworks.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Freedom4el/ndse-homeworks/issues"
+  },
+  "homepage": "https://github.com/Freedom4el/ndse-homeworks#readme",
+  "devDependencies": {
+    "dotenv": "^10.0.0"
+  },
+  "dependencies": {
+    "readline": "^1.3.0",
+    "yargs": "^17.1.1"
+  }
+}
