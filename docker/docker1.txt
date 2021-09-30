@@ -1,0 +1,84 @@
+Windows PowerShell
+(C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены.
+
+Попробуйте новую кроссплатформенную оболочку PowerShell (https://aka.ms/pscore6)
+
+PS C:\Users\Freedom4el> docker pull busybox
+Using default tag: latest
+Error response from daemon: Head "https://registry-1.docker.io/v2/library/busybox/manifests/latest": net/http: TLS handshake timeout
+PS C:\Users\Freedom4el> docker pull busybox
+Using default tag: latest
+latest: Pulling from library/busybox
+24fb2886d6f6: Pull complete
+Digest: sha256:f7ca5a32c10d51aeda3b4d01c61c6061f497893d7f6628b92f822f7117182a57
+Status: Downloaded newer image for busybox:latest
+docker.io/library/busybox:latest
+PS C:\Users\Freedom4el>
+PS C:\Users\Freedom4el> docker run --name busybox -i -t busybox ping -c 7 netology.ru
+PING netology.ru (104.22.48.171): 56 data bytes
+64 bytes from 104.22.48.171: seq=0 ttl=37 time=36.758 ms
+64 bytes from 104.22.48.171: seq=1 ttl=37 time=36.466 ms
+64 bytes from 104.22.48.171: seq=2 ttl=37 time=36.331 ms
+64 bytes from 104.22.48.171: seq=3 ttl=37 time=36.451 ms
+64 bytes from 104.22.48.171: seq=4 ttl=37 time=36.321 ms
+64 bytes from 104.22.48.171: seq=5 ttl=37 time=36.541 ms
+64 bytes from 104.22.48.171: seq=6 ttl=37 time=36.339 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 36.321/36.458/36.758 ms
+PS C:\Users\Freedom4el> docker rename busybox pinger
+PS C:\Users\Freedom4el> docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS                      PORTS     NAMES
+72cd4b3a31bb   busybox   "ping -c 7 netology.…"   27 seconds ago   Exited (0) 21 seconds ago             pinger
+PS C:\Users\Freedom4el> docker logs -t pinger
+2021-09-29T20:09:17.605081823Z PING netology.ru (104.22.48.171): 56 data bytes
+2021-09-29T20:09:17.641942672Z 64 bytes from 104.22.48.171: seq=0 ttl=37 time=36.758 ms
+2021-09-29T20:09:18.641714227Z 64 bytes from 104.22.48.171: seq=1 ttl=37 time=36.466 ms
+2021-09-29T20:09:19.641653237Z 64 bytes from 104.22.48.171: seq=2 ttl=37 time=36.331 ms
+2021-09-29T20:09:20.641929325Z 64 bytes from 104.22.48.171: seq=3 ttl=37 time=36.451 ms
+2021-09-29T20:09:21.641828851Z 64 bytes from 104.22.48.171: seq=4 ttl=37 time=36.321 ms
+2021-09-29T20:09:22.642194961Z 64 bytes from 104.22.48.171: seq=5 ttl=37 time=36.541 ms
+2021-09-29T20:09:23.642125922Z 64 bytes from 104.22.48.171: seq=6 ttl=37 time=36.339 ms
+2021-09-29T20:09:23.642151760Z
+2021-09-29T20:09:23.642154235Z --- netology.ru ping statistics ---
+2021-09-29T20:09:23.642156018Z 7 packets transmitted, 7 packets received, 0% packet loss
+2021-09-29T20:09:23.642157681Z round-trip min/avg/max = 36.321/36.458/36.758 ms
+PS C:\Users\Freedom4el> docker start pinger
+pinger
+PS C:\Users\Freedom4el> docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS                     PORTS     NAMES
+72cd4b3a31bb   busybox   "ping -c 7 netology.…"   2 minutes ago   Exited (0) 7 seconds ago             pinger
+PS C:\Users\Freedom4el> docker logs -t pinger
+2021-09-29T20:09:17.605081823Z PING netology.ru (104.22.48.171): 56 data bytes
+2021-09-29T20:09:17.641942672Z 64 bytes from 104.22.48.171: seq=0 ttl=37 time=36.758 ms
+2021-09-29T20:09:18.641714227Z 64 bytes from 104.22.48.171: seq=1 ttl=37 time=36.466 ms
+2021-09-29T20:09:19.641653237Z 64 bytes from 104.22.48.171: seq=2 ttl=37 time=36.331 ms
+2021-09-29T20:09:20.641929325Z 64 bytes from 104.22.48.171: seq=3 ttl=37 time=36.451 ms
+2021-09-29T20:09:21.641828851Z 64 bytes from 104.22.48.171: seq=4 ttl=37 time=36.321 ms
+2021-09-29T20:09:22.642194961Z 64 bytes from 104.22.48.171: seq=5 ttl=37 time=36.541 ms
+2021-09-29T20:09:23.642125922Z 64 bytes from 104.22.48.171: seq=6 ttl=37 time=36.339 ms
+2021-09-29T20:09:23.642151760Z
+2021-09-29T20:09:23.642154235Z --- netology.ru ping statistics ---
+2021-09-29T20:09:23.642156018Z 7 packets transmitted, 7 packets received, 0% packet loss
+2021-09-29T20:09:23.642157681Z round-trip min/avg/max = 36.321/36.458/36.758 ms
+2021-09-29T20:11:20.843873881Z PING netology.ru (104.22.48.171): 56 data bytes
+2021-09-29T20:11:20.880470569Z 64 bytes from 104.22.48.171: seq=0 ttl=37 time=36.563 ms
+2021-09-29T20:11:21.880421620Z 64 bytes from 104.22.48.171: seq=1 ttl=37 time=36.420 ms
+2021-09-29T20:11:22.880512890Z 64 bytes from 104.22.48.171: seq=2 ttl=37 time=36.457 ms
+2021-09-29T20:11:23.880799570Z 64 bytes from 104.22.48.171: seq=3 ttl=37 time=36.546 ms
+2021-09-29T20:11:24.880665673Z 64 bytes from 104.22.48.171: seq=4 ttl=37 time=36.386 ms
+2021-09-29T20:11:25.880797631Z 64 bytes from 104.22.48.171: seq=5 ttl=37 time=36.362 ms
+2021-09-29T20:11:26.881070635Z 64 bytes from 104.22.48.171: seq=6 ttl=37 time=36.440 ms
+2021-09-29T20:11:26.881098527Z
+2021-09-29T20:11:26.881101603Z --- netology.ru ping statistics ---
+2021-09-29T20:11:26.881104058Z 7 packets transmitted, 7 packets received, 0% packet loss
+2021-09-29T20:11:26.881106342Z round-trip min/avg/max = 36.362/36.453/36.563 ms
+PS C:\Users\Freedom4el> docker rm pinger
+pinger
+PS C:\Users\Freedom4el> docker rmi busybox
+Untagged: busybox:latest
+Untagged: busybox@sha256:f7ca5a32c10d51aeda3b4d01c61c6061f497893d7f6628b92f822f7117182a57
+Deleted: sha256:16ea53ea7c652456803632d67517b78a4f9075a10bfdc4fc6b7b4cbf2bc98497
+Deleted: sha256:cfd97936a58000adc09a9f87adeeb7628a2c71d11c4998e6e7f26935fa0cd713
+PS C:\Users\Freedom4el>
