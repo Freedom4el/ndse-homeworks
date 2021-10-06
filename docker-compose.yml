@@ -1,0 +1,19 @@
+version: "2"
+
+services:
+  library:
+    build:
+      context: ./src/library
+    command: npm run start
+    volumes:
+      - ./src/library:/app/
+    ports:
+      - "3001:3001"
+  counter:
+    build:
+      context: ./src/counter
+    command: npm run start
+    volumes:
+      - ./src/counter:/app/
+    ports:
+      - "3000:3000"

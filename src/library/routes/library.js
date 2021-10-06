@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {Book} = require('../models');
 const fileMiddleware = require('../middleware/file');
+const http = require('http');
+const axios = require('axios').default;
 
 const data = {
     book: [],
@@ -39,14 +41,23 @@ router.post('/book/create',
         }
 });
 
-router.get('/book/:id', (req, res) => {
+router.get('/book/:id', async (req, res) => {
     const {book} = data;
     const {id} = req.params;
     const idx = book.findIndex(el => el.id === id);
     if (idx !== -1) {
+        let countBook;
+        try {
+            const responseCounterPost = await axios.post(`http://counter:3000/counter/${id}/incr`, {});
+            const responseCounterGet = await axios.get(`http://counter:3000/counter/${id}`, {});
+            countBook = responseCounterGet.data;
+        } catch (error) {
+            console.log(error);
+        }
         res.render("library/view", {
             title: book[idx]['title'],
             book: book[idx],
+            count: (countBook)?countBook[id]:1
         });
     } else {
         res.status(404).redirect('/404');
@@ -108,5 +119,53 @@ router.post('/book/delete/:id', (req, res) => {
         res.status(404).redirect('/404');
     }
 });
+
+function httpCountBookPut(id){
+    const httpInfo = {
+        host: 'localhost',
+        port: 3000,
+        path: '/counter/'+id+'/incr',
+        method: 'POST'
+    };
+    
+    const countBookPut = http.request(httpInfo, function (res) {
+        let error;
+        if (res.statusCode !== 201) {
+            error = new Error('Request Failed.\n' + `Status Code: ${res.statusCode}`);
+        }
+
+        if (error) {
+            console.error(error.message);
+            res.resume();
+            return;
+        }
+        res.setEncoding('utf8');
+    });
+    countBookPut.end();
+}
+
+function httpContBookGet(id,callback) {
+    const countBookGet = {
+        host: 'localhost',
+        port: 3000,
+        path: '/counter/'+id,
+        method: 'GET'
+    };
+    
+    const httpCountBook = http.request(countBookGet, function (res) {
+        let error;
+        if (res.statusCode !== 200) {
+            error = new Error('Request Failed.\n' + `Status Code: ${res.statusCode}`);
+        }
+
+        if (error) {
+            console.error(error.message);
+            res.resume();
+            return;
+        }
+        res.setEncoding('utf8');
+    });
+    httpCountBook.end();
+}
 
 module.exports = router;
