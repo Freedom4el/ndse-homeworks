@@ -48,8 +48,8 @@ router.get('/book/:id', async (req, res) => {
     if (idx !== -1) {
         let countBook;
         try {
-            const responseCounterPost = await axios.post(`http://${process.env.COUNTER_URL}:3000/counter/${id}/incr`, {});
-            const responseCounterGet = await axios.get(`http://${process.env.COUNTER_URL}:3000/counter/${id}`, {});
+            const responseCounterPost = await axios.post(`${process.env.COUNTER_URL}/counter/${id}/incr`, {});
+            const responseCounterGet = await axios.get(`${process.env.COUNTER_URL}/counter/${id}`, {});
             countBook = responseCounterGet.data;
         } catch (error) {
             console.log(error);
