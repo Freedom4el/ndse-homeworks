@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {Book} = require('../models');
+const Book = require('../models/Book');
 const fileMiddleware = require('../middleware/file');
 const axios = require('axios').default;
 

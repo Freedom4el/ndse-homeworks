@@ -3,7 +3,7 @@ const router = express.Router();
 
 const fileMiddleware = require('../../middleware/file');
 
-const {Book} = require('../../models');
+const Book = require('../../models/Book');
 
 router.use(express.json());
 
