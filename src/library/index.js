@@ -4,10 +4,16 @@ const express = require('express');
 const indexRouter = require('./routes/index');
 const libraryRouter = require('./routes/library');
 const libraryApiRouter = require('./routes/api/library');
-const loginRouter = require('./routes/api/login');
-const errorMiddleware = require('./middleware/error');
-const mongoose = require('mongoose');
 
+const authApiRouter = require('./routes/api/authorization');
+const profileApiRouter = require('./routes/api/profile');
+
+const authRouter = require('./routes/authorization');
+const profileRouter = require('./routes/profile');
+
+const errorMiddleware = require('./middleware/error');
+
+const mongoose = require('mongoose');
 const app = express();
 
 app.use(express.json());
@@ -15,9 +21,12 @@ app.use(express.urlencoded({extended: false}));
 app.set("view engine", "ejs");
 
 app.use('/', indexRouter);
+app.use(authRouter);
+app.use(profileRouter);
 app.use('/library', libraryRouter);
 app.use('/api', libraryApiRouter);
-app.use('/login', loginRouter);
+app.use('/api', authApiRouter);
+app.use('/api', profileApiRouter);
 
 app.use(errorMiddleware);
 
