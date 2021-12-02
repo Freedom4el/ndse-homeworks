@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Book = require('../models/Book');
+const container = require("../Ioc/container");
+const BooksRepository = require("../repositories/books-repository");
 const fileMiddleware = require('../middleware/file');
 const axios = require('axios').default;
 
 router.get('/', async (req, res) => {
-    const book = await Book.find();
+    const repo = container.get(BooksRepository);
+    const book = await repo.getBooks();
     res.render("library/index", {
         title: "Библиотека",
         books: book,
@@ -26,9 +29,10 @@ router.post('/book/create',
         const fileBook = req.file.path;
         const {title, description, authors, favorite, fileCover} = req.body;
 
-        const newBook = new Book({title, description, authors, favorite, fileCover, fileName, fileBook});
+        const newBook = {title, description, authors, favorite, fileCover, fileName, fileBook};
         try {
-            await newBook.save();
+            const repo = container.get(BooksRepository);
+            await repo.createBook(newBook);
             res.redirect('/library');
         } catch (e) {
             console.error(e);
@@ -40,7 +44,8 @@ router.get('/book/:id', async (req, res) => {
     let book;
 
     try {
-        book = await Book.findById(id);
+        const repo = container.get(BooksRepository);
+        book = await repo.getBook(id);
     } catch (e) {
         console.error(e);
         res.status(404).redirect('/404');
@@ -72,7 +77,8 @@ router.get('/book/update/:id', async (req, res) => {
     let book;
 
     try {
-        book = await Book.findById(id);
+        const repo = container.get(BooksRepository);
+        book = await repo.getBook(id);
     } catch (e) {
         console.error(e);
         res.status(404).redirect('/404');
@@ -94,7 +100,8 @@ router.post('/book/update/:id',
 
         const updateBook = {title, description, authors, favorite, fileCover, fileName, fileBook};
         try {
-            await Book.findByIdAndUpdate(id, updateBook);
+            const repo = container.get(BooksRepository);
+            await repo.updateBook(id, updateBook);
         } catch (e) {
             console.error(e);
             res.status(404).redirect('/404');
@@ -107,7 +114,8 @@ router.post('/book/delete/:id', async (req, res) => {
     const {id} = req.params;
 
     try {
-        await Book.deleteOne({_id: id});
+        const repo = container.get(BooksRepository);
+        await repo.deleteBook(id);
     } catch (e) {
         console.error(e);
         res.status(404).redirect('/404');
