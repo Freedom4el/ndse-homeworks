@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
+const container = require("../../Ioc/container");
+const BooksRepository = require("../../repositories/books-repository");
 const fileMiddleware = require('../../middleware/file');
 
 const Book = require('../../models/Book');
@@ -17,7 +18,8 @@ router.post('/user', (req, res) => {
 });
 
 router.get('/books/', async (req, res) => {
-    const book = await Book.find();
+    const repo = container.get(BooksRepository);
+    const book = await repo.getBooks();
     res.json(book);
 });
 
@@ -26,7 +28,8 @@ router.get('/books/:id', async (req, res) => {
     let book;
 
     try {
-        book = await Book.findById(id);
+        const repo = container.get(BooksRepository);
+        book = await repo.getBook(id);
         res.json(book);
     } catch (e) {
         console.error(e);
@@ -43,10 +46,11 @@ router.post('/books/',
             const fileBook = req.file.path;
             const {title, description, authors, favorite, fileCover} = req.body;
 
-            const newBook = new Book({title, description, authors, favorite, fileCover, fileName, fileBook});
+            const newBook = {title, description, authors, favorite, fileCover, fileName, fileBook};
         
             try {
-                await newBook.save();
+                const repo = container.get(BooksRepository);
+                await repo.createBook(newBook);
                 res.json(newBook);
             } catch (e) {
                 console.error(e);
@@ -68,7 +72,8 @@ router.put('/books/:id',
         const updateBook = {title, description, authors, favorite, fileCover, fileName, fileBook};
 
         try {
-            await Book.findByIdAndUpdate(id, updateBook);
+            const repo = container.get(BooksRepository);
+            await repo.updateBook(id, updateBook);
             res.redirect(`/api/books/${id}`);
         } catch (e) {
             console.error(e);
@@ -80,7 +85,8 @@ router.delete('/books/:id', async (req, res) => {
     const {id} = req.params;
 
     try {
-        await Book.deleteOne({_id: id});
+        const repo = container.get(BooksRepository);
+        await repo.deleteBook(id);
         res.json(true);
     } catch (e) {
         console.error(e);
@@ -93,7 +99,8 @@ router.get('/books/:id/download', async (req, res) => {
     let book;
 
     try {
-        book = await Book.findById(id);
+        const repo = container.get(BooksRepository);
+        book = await repo.getBook(id);
         res.download(__dirname+'/../../'+book['fileBook'], book['fileName'], err=>{
             if (err){
                 res.status(404);
