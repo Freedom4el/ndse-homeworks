@@ -1,10 +1,10 @@
-const express = require('express');
+import express from "express";
 
-const indexRouter = require('./routes/index');
-const libraryRouter = require('./routes/library');
-const libraryApiRouter = require('./routes/api/library');
-const loginRouter = require('./routes/api/login');
-const errorMiddleware = require('./middleware/error');
+import {homeRouter} from "./routes";
+import {libraryRouter} from "./routes/library";
+import {libraryApiRouter} from "./routes/api/library";
+import {loginRouter} from "./routes/api/login";
+import {errorMiddleware} from "./middleware/error";
 
 const app = express();
 
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.set("view engine", "ejs");
 
-app.use('/', indexRouter);
+app.use('/', homeRouter);
 app.use('/library', libraryRouter);
 app.use('/api', libraryApiRouter);
 app.use('/login', loginRouter);

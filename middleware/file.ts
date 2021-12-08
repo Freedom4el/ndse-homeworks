@@ -1,5 +1,6 @@
-const multer = require('multer');
-const { v4: uuid} = require('uuid');
+import { Request, Response } from "express";
+import multer from "multer";
+import { v4 as uuid} from "uuid";
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -12,14 +13,14 @@ const storage = multer.diskStorage({
 
 const allowedTypes = ['application/pdf', 'text/plain', 'application/book', 'text/xml'];
 
-const fileFilter = (req, file, cb) => {
+const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
   if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true)
+    cb(null, true);
   } else {
-    cb(null, false)
+    cb(null, false);
   }
 };
 
-module.exports = multer({
+export const fileMiddleware = multer({
   storage, fileFilter
 });

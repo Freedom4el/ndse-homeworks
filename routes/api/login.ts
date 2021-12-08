@@ -1,4 +1,4 @@
-const express = require('express');
+import express from "express";
 const router = express.Router();
 
 router.post('/', (req, res) => {
@@ -10,4 +10,4 @@ router.post('/', (req, res) => {
     res.json(user);
 });
 
-module.exports = router;
+export const loginRouter = router;
